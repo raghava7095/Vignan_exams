@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateTest from "./pages/CreateTest";
 import ManageTests from "./pages/ManageTests";
 import UpdateQuestions from "./pages/UpdateQuestions";
+import StartTest from "./pages/StartTest";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
             <Route path="/create-test" element={<CreateTest />} />
             <Route path="/manage-tests" element={<ManageTests />} />
             <Route path="/update-questions" element={<UpdateQuestions />} />
+            <Route path="/start-test" element={<StartTest />} />
           </Routes>
         </div>
       </div>
