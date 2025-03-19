@@ -1,14 +1,14 @@
 const { Test } = require('../models/testModel');
 
-// Create Test API
-const createTest = async (req, res) => {
-  const { testName, categories, questionsText } = req.body;
+// Admin API: Create Test (with questions)
+exports.createTest = async (req, res) => {
+  const { testName, categoryName, questionsText } = req.body;
 
-  if (!testName || !questionsText) {
-    return res.status(400).json({ message: "Test name and questions are required" });
+  if (!testName || !categoryName || !questionsText) {
+    return res.status(400).json({ message: "Test name, category, and questions are required" });
   }
 
-  // Parse questions from textarea input
+  // Parse questionsText (textarea format)
   const parsedQuestions = questionsText.split('\n\n').map(block => {
     const [questionLine, ...rest] = block.split('\n');
     const question = questionLine.trim();
@@ -19,23 +19,29 @@ const createTest = async (req, res) => {
   });
 
   try {
-    const newTest = await Test.create({ testName, categories, questions: parsedQuestions });
+    const newTest = await Test.create({ testName, categoryName, questions: parsedQuestions });
     res.status(201).json({ message: "Test created successfully", test: newTest });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
 
-// Get Test API
-const getTestById = async (req, res) => {
-  const { id } = req.params;
+// Student API: Get 20 Random Questions from a category inside a test
+exports.getRandomQuestions = async (req, res) => {
+  const { categoryName, testName } = req.params;
+
   try {
-    const test = await Test.findById(id);
-    if (!test) return res.status(404).json({ message: "Test not found" });
-    res.json({ questions: test.questions });
+    const test = await Test.findOne({ categoryName, testName });
+    if (!test || !test.questions.length) {
+      return res.status(404).json({ message: "Test not found or has no questions." });
+    }
+    
+
+    const shuffled = test.questions.sort(() => 0.5 - Math.random());
+    const selectedQuestions = shuffled.slice(0, 20);
+
+    res.json({ questions: selectedQuestions });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
-
-module.exports = { createTest, getTestById };

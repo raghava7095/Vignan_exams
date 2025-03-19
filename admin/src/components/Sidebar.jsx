@@ -26,6 +26,11 @@ export default function Sidebar() {
               Update Questions
             </Link>
           </li>
+          <li>
+            <Link to="/start-test" className="block p-2 hover:bg-gray-700 rounded">
+              Start Test
+            </Link>
+          </li>
         </ul>
       </nav>
     </div>

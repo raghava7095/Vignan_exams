@@ -19,7 +19,8 @@ app.use(express.json());
 app.use("/api/exams", examRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/students", studentRoutes);
-app.use('/api', testRoutes);
+app.use('/api/tests', testRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
